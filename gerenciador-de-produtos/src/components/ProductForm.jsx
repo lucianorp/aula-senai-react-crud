@@ -1,35 +1,46 @@
-import { useState } from "react"
+import { useState, useEffect } from 'react';
+import styles from '../styles/App.module.css';
 
+export default function ProductForm({ onSave, selectedProduct }) {
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
 
-export default function ProductForm({selectedProduct}){
-    
-    const [name,setName] = useState('')
-
-    const [price,setPrice] = useState('')
-
-    const handleSubmit = (e)=>{
-        e.preventDefault()
+  useEffect(() => {
+    if (selectedProduct) {
+      setName(selectedProduct.name);
+      setPrice(selectedProduct.price);
+    } else {
+      setName('');
+      setPrice('');
     }
+  }, [selectedProduct]);
 
-    return(
-        <form onSubmit={handleSubmit}>
-            <input
-            type="text"
-            placeholder="Nome do Produto"
-            value={name}
-            onChange={(e)=> setName(e.target.value)}
-            required
-            />
-            <input
-            type="number"
-            placeholder="Preço"
-            value={price}
-            onChange={(e)=> setPrice(e.target.value)}
-            required
-            />
-            <button type="submit">
-                {selectedProduct ? 'Atualizar' : 'Adicionar'}
-            </button>
-        </form>
-    )
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({
+      id: selectedProduct?.id,
+      name,
+      price: parseFloat(price),
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <input
+        type="text"
+        placeholder="Nome"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+      />
+      <input
+        type="number"
+        placeholder="Preço"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        required
+      />
+      <button type="submit">{selectedProduct ? 'Atualizar' : 'Adicionar'}</button>
+    </form>
+  );
 }

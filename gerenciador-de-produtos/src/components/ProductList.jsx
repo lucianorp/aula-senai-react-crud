@@ -1,13 +1,15 @@
-import styles from '../styles/App.module.css'
+import styles from '../styles/App.module.css';
 
-export default function ProductList(){
-    return(
-        <ul className={styles.list}>
-            <li>
-                <strong>Produto X </strong>: R$ 20.00
-                <button>Editar</button> 
-                <button>Excluir</button> 
-            </li>
-        </ul>
-    )
+export default function ProductList({ products, onDelete, onEdit }) {
+  return (
+    <ul className={styles.list}>
+      {products.map((product) => (
+        <li key={product.id}>
+          <strong>{product.name}</strong>: R$ {product.price.toFixed(2)}
+          <button onClick={() => onEdit(product)}>Editar</button>
+          <button onClick={() => onDelete(product.id)}>Excluir</button>
+        </li>
+      ))}
+    </ul>
+  );
 }
